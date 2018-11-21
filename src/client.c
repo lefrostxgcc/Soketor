@@ -15,10 +15,11 @@ void action_client(const char *address, int port, int num1, int num2)
 	int		result;
 
 	client_socket = create_client_socket(address, port);
+	printf("Sending request %d %d\n", num1, num2);
 	send_number(client_socket, num1);
 	send_number(client_socket, num2);
 	result = recv_number(client_socket);
-	printf("%d\n", result);
+	printf("Getting result: %d\n", result);
 	close(client_socket);
 }
 
