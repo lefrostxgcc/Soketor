@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
 
 static int parse_cmd(int argc, char *argv[], struct socketor_args *args)
 {
-	if (argc < 2 || argc > 5)
+	if (argc < 2 || argc > 6)
 		return -1;
 
 	if (argc > 1)
