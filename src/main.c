@@ -24,6 +24,7 @@ static int parse_client_cmd(int argc, char *argv[], struct socketor_args *args);
 static void fail(const char *message);
 static void action_server(int port, int operation);
 static void action_client(int address, int port, int num1, int num2);
+static int check_operation(int operation);
 
 int main(int argc, char *argv[]) 
 {
@@ -47,7 +48,7 @@ int main(int argc, char *argv[])
 
 static int parse_cmd(int argc, char *argv[], struct socketor_args *args)
 {
-	if (argc < 1 || argc > 5)
+	if (argc < 2 || argc > 5)
 		return -1;
 
 	if (argc > 1)
@@ -69,7 +70,21 @@ static void fail(const char *message)
 
 static int parse_server_cmd(int argc, char *argv[], struct socketor_args *args)
 {
+	if (argc > 2)
+		args->port = atoi(argv[2]);
+	else
+		return -1;
+
+	if (argc > 3)
+		args->operation = argv[3][0];
+	else
+		return -1;
+
+	if (argv[3][1] != '\0' || check_operation(args->operation) < 0)
+		return -1;
+
 	args->app = APP_SERVER;
+	
 	return 0;
 }
 
@@ -77,6 +92,16 @@ static int parse_client_cmd(int argc, char *argv[], struct socketor_args *args)
 {
 	args->app = APP_CLIENT;
 	return 0;
+}
+
+static int check_operation(int operation)
+{
+	switch (operation)
+	{
+		case '+': case '-' : case '*' : case '/' : case '%':
+			return 0;
+	}
+	return -1;
 }
 
 static void action_server(int port, int operation)
