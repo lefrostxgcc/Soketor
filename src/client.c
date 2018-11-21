@@ -12,8 +12,13 @@ static int create_client_socket(const char *address, int port);
 void action_client(const char *address, int port, int num1, int num2)
 {
 	int		client_socket;
+	int		result;
 
 	client_socket = create_client_socket(address, port);
+	send_number(client_socket, num1);
+	send_number(client_socket, num2);
+	result = recv_number(client_socket);
+	printf("%d\n", result);
 	close(client_socket);
 }
 
