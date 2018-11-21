@@ -6,8 +6,8 @@ enum { APP_SERVER, APP_CLIENT };
 
 struct socketor_args
 {
+	const char *address;
 	int app;
-	int address;
 	int port;
 	int operation;
 	int num1;
@@ -23,7 +23,7 @@ static int parse_server_cmd(int argc, char *argv[], struct socketor_args *args);
 static int parse_client_cmd(int argc, char *argv[], struct socketor_args *args);
 static void fail(const char *message);
 static void action_server(int port, int operation);
-static void action_client(int address, int port, int num1, int num2);
+static void action_client(const char *address, int port, int num1, int num2);
 static int check_operation(int operation);
 
 int main(int argc, char *argv[]) 
@@ -108,6 +108,6 @@ static void action_server(int port, int operation)
 {
 }
 
-static void action_client(int address, int port, int num1, int num2)
+static void action_client(const char *address, int port, int num1, int num2)
 {
 }
