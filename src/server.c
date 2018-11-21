@@ -17,6 +17,8 @@ void action_server(int port, int operation)
 	int		server_socket;
 
 	server_socket = create_server_socket(port, 10);
+	printf(">>Started server with %c operation on %d port\n",
+		operation, port);
 	accept_clients(server_socket, operation);
 	close(server_socket);
 }
@@ -83,6 +85,9 @@ static void process_client(int client_socket, int operation)
 	num1 = recv_number(client_socket);
 	num2 = recv_number(client_socket);
 	result = perform_calculation(num1, num2, operation);
+	printf(">>Accepted client: %d %c %d = %d\n",
+		num1, num2, operation, result);
+	fflush(stdout);
 	send_number(client_socket, result);
 }
 
