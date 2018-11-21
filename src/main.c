@@ -90,7 +90,28 @@ static int parse_server_cmd(int argc, char *argv[], struct socketor_args *args)
 
 static int parse_client_cmd(int argc, char *argv[], struct socketor_args *args)
 {
+	if (argc > 2)
+		args->address = argv[2];
+	else
+		return -1;
+
+	if (argc > 3)
+		args->port = atoi(argv[3]);
+	else
+		return -1;
+
+	if (argc > 4)
+		args->num1 = atoi(argv[4]);
+	else
+		return -1;
+
+	if (argc > 5)
+		args->num2 = atoi(argv[5]);
+	else
+		return -1;
+
 	args->app = APP_CLIENT;
+
 	return 0;
 }
 
