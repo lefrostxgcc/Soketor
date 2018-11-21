@@ -5,6 +5,7 @@
 #include <netinet/in.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 #include "utility.h"
 
 static int create_server_socket(int port, int backlog);
@@ -82,12 +83,10 @@ static void process_client(int client_socket, int operation)
 	int		num2;
 	int		result;
 
-	num1 = recv_number(client_socket);
-	num2 = recv_number(client_socket);
+	recv_number_pair(client_socket, &num1, &num2);
 	result = perform_calculation(num1, num2, operation);
 	printf(">>Accepted client: %d %c %d = %d\n",
-		num1, num2, operation, result);
-	fflush(stdout);
+		num1, operation, num2, result);
 	send_number(client_socket, result);
 }
 
@@ -102,9 +101,13 @@ static int perform_calculation(int num1, int num2, int operation)
 		case '*':
 			return num1 * num2;
 		case '/':
+			if (num2 == 0)
+				break;
 			return num1 / num2;
 		case '%':
-			return num2 % num2;
+			if (num2 == 0)
+				break;
+			return num1 % num2;
 	}
-	return 123456789;
+	return INT_MAX;
 }

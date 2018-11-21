@@ -6,7 +6,9 @@ enum {NUMBER_ERROR, NUMBER_EQUAL, NUMBER_LESS, NUMBER_GREATER};
 
 int		rand_number(int min, int max);
 void	send_number(int socket, int number);
+void	send_number_pair(int socket, int num1, int num2);
 int		recv_number(int socket);
+void	recv_number_pair(int socket, int *num1, int *num2);
 void	action_server(int port, int operation);
 void	action_client(const char *address, int port, int num1, int num2);
 

@@ -27,6 +27,7 @@ int	recv_number(int socket)
 {
 	char		buf[32];
 	int			bytes_read;
+	int			number;
 
 	bytes_read = read(socket, buf, sizeof(buf) / sizeof(buf[0]) - 1);
 	if (bytes_read < 0)
@@ -35,5 +36,36 @@ int	recv_number(int socket)
 		exit(EXIT_FAILURE);
 	}
 	buf[bytes_read] = '\0';
-	return atoi(buf);
+	sscanf(buf, "%d", &number);
+	return number;
+}
+
+void send_number_pair(int socket, int num1, int num2)
+{
+	char		buf[32];
+	int			out_msg_len;
+
+	out_msg_len = snprintf(buf, sizeof(buf)/sizeof(buf[0]), "%d %d\n",
+		num1, num2);
+	if (write(socket, buf, out_msg_len) < 0)
+	{
+		perror("write");
+		exit(EXIT_FAILURE);
+	}
+}
+
+void recv_number_pair(int socket, int *num1, int *num2)
+{
+	char		buf[32];
+	int			bytes_read;
+	int			number;
+
+	bytes_read = read(socket, buf, sizeof(buf) / sizeof(buf[0]) - 1);
+	if (bytes_read < 0)
+	{
+		perror("read");
+		exit(EXIT_FAILURE);
+	}
+	buf[bytes_read] = '\0';
+	sscanf(buf, "%d %d", num1, num2);
 }
