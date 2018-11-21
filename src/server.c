@@ -9,6 +9,8 @@
 
 static int create_server_socket(int port, int backlog);
 static void accept_clients(int server_socket, int operation);
+static void process_client(int client_socket, int operation);
+static int perform_calculation(int num1, int num2, int operation);
 
 void action_server(int port, int operation)
 {
@@ -69,4 +71,34 @@ static void accept_clients(int server_socket, int operation)
 		}
 		close(client_socket);
 	}
+}
+
+static void process_client(int client_socket, int operation)
+{
+	int		num1;
+	int		num2;
+	int		result;
+
+	num1 = recv_number(client_socket);
+	num2 = recv_number(client_socket);
+	result = perform_calculation(num1, num2, operation);
+	send_number(client_socket, result);
+}
+
+static int perform_calculation(int num1, int num2, int operation)
+{
+	switch (operation)
+	{
+		case '+':
+			return num1 + num2;
+		case '-':
+			return num1 - num2;
+		case '*':
+			return num1 * num2;
+		case '/':
+			return num1 / num2;
+		case '%':
+			return num2 % num2;
+	}
+	return 123456789;
 }
