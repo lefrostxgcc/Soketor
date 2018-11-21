@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "utility.h"
 
 enum { APP_SERVER, APP_CLIENT };
 
@@ -22,8 +23,6 @@ static int parse_cmd(int argc, char *argv[], struct socketor_args *args);
 static int parse_server_cmd(int argc, char *argv[], struct socketor_args *args);
 static int parse_client_cmd(int argc, char *argv[], struct socketor_args *args);
 static void fail(const char *message);
-static void action_server(int port, int operation);
-static void action_client(const char *address, int port, int num1, int num2);
 static int check_operation(int operation);
 
 int main(int argc, char *argv[]) 
@@ -123,12 +122,4 @@ static int check_operation(int operation)
 			return 0;
 	}
 	return -1;
-}
-
-static void action_server(int port, int operation)
-{
-}
-
-static void action_client(const char *address, int port, int num1, int num2)
-{
 }
