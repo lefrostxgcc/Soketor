@@ -69,6 +69,7 @@ static void accept_clients(int server_socket, int operation)
 			perror("accept");
 			exit(EXIT_FAILURE);
 		}
+		process_client(client_socket, operation);
 		close(client_socket);
 	}
 }
