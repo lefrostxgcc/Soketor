@@ -12,13 +12,18 @@ static int create_client_socket(const char *address, int port);
 void action_client(const char *address, int port, int num1, int num2)
 {
 	int		client_socket;
+	int		status;
 	int		result;
 
 	client_socket = create_client_socket(address, port);
 	printf("Sending request %d %d\n", num1, num2);
 	send_number_pair(client_socket, num1, num2);
-	result = recv_number(client_socket);
-	printf("Getting result: %d\n", result);
+	printf("Getting result: ");
+	result = recv_number_with_status(client_socket, &status);
+	if (status == STATUS_OK)
+		printf("%d\n", result);
+	else
+		printf("%s\n", status_message(status));
 	close(client_socket);
 }
 

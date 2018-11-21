@@ -11,14 +11,14 @@
 static int create_server_socket(int port, int backlog);
 static void accept_clients(int server_socket, int operation);
 static void process_client(int client_socket, int operation);
-static int perform_calculation(int num1, int num2, int operation);
+static int perform_calculation(int num1, int num2, int operation, int *result);
 
 void action_server(int port, int operation)
 {
 	int		server_socket;
 
 	server_socket = create_server_socket(port, 10);
-	printf(">>Started server with %c operation on %d port\n",
+	printf(">> Started server with %c operation on %d port\n",
 		operation, port);
 	accept_clients(server_socket, operation);
 	close(server_socket);
@@ -81,33 +81,45 @@ static void process_client(int client_socket, int operation)
 {
 	int		num1;
 	int		num2;
+	int		status;
 	int		result;
 
 	recv_number_pair(client_socket, &num1, &num2);
-	result = perform_calculation(num1, num2, operation);
-	printf(">>Accepted client: %d %c %d = %d\n",
-		num1, operation, num2, result);
-	send_number(client_socket, result);
+	printf(">> Accepted client: %d %c %d = ", num1, operation, num2);
+	status = perform_calculation(num1, num2, operation, &result);
+	if (status == STATUS_OK)
+		printf("%d\n", result);
+	else
+		printf("%s\n", status_message(status));
+	send_number_with_status(client_socket, result, status);
 }
 
-static int perform_calculation(int num1, int num2, int operation)
+static int perform_calculation(int num1, int num2, int operation, int* result)
 {
+	*result = 0;
 	switch (operation)
 	{
 		case '+':
-			return num1 + num2;
+			*result = num1 + num2;
+			break;
 		case '-':
-			return num1 - num2;
+			*result = num1 - num2;
+			break;
 		case '*':
-			return num1 * num2;
+			*result = num1 * num2;
+			break;
 		case '/':
 			if (num2 == 0)
-				break;
-			return num1 / num2;
+				return STATUS_DIVISION_BY_ZERO;
+			*result = num1 / num2;
+			break;
 		case '%':
 			if (num2 == 0)
-				break;
-			return num1 % num2;
+				return STATUS_DIVISION_BY_ZERO;
+			*result = num1 % num2;
+			break;
+		default:
+			return STATUS_UNKNOWN_OPERATION;
 	}
-	return INT_MAX;
+	return STATUS_OK;
 }
