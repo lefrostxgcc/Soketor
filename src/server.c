@@ -8,14 +8,14 @@
 #include "utility.h"
 
 static int create_server_socket(int port, int backlog);
-static void accept_clients(int server_socket);
+static void accept_clients(int server_socket, int operation);
 
 void action_server(int port, int operation)
 {
 	int		server_socket;
 
 	server_socket = create_server_socket(port, 10);
-	accept_clients(server_socket);
+	accept_clients(server_socket, operation);
 	close(server_socket);
 }
 
@@ -55,7 +55,7 @@ static int create_server_socket(int port, int backlog)
 	return server_socket;
 }
 
-static void accept_clients(int server_socket)
+static void accept_clients(int server_socket, int operation)
 {
 	int			client_socket;
 
