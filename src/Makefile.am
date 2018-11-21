@@ -1,0 +1,2 @@
+bin_PROGRAMS = socketor
+socketor_SOURCES = utility.h utility.c main.c 
